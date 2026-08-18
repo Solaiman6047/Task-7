@@ -14,20 +14,39 @@ class Controller(Node):
     def __init__(self):
         super().__init__('controller')
 
+        self.declare_parameter(
+            'color_topic',
+            '/turtle1/color_sensor'
+        )
+
+        self.declare_parameter(
+            'cmd_vel_topic',
+            '/turtle1/cmd_vel'
+        )
+
+        self.declare_parameter(
+            'dominant_color_topic',
+            '/dominant_color'
+        )
+
+        color_topic = self.get_parameter('color_topic').value
+        cmd_vel_topic = self.get_parameter('cmd_vel_topic').value
+        dominant_color_topic = self.get_parameter('dominant_color_topic').value
+
         self.color_sub = self.create_subscription(
             Color, 
-            "/turtle1/color_sensor", 
+            color_topic, 
             self.perception,
             10)
 
         self.publisher = self.create_publisher(
             Twist,
-            '/turtle1/cmd_vel',
+            cmd_vel_topic,
             10
         )
         self.color_publisher = self.create_publisher(
             String,
-            '/dominant_color',
+            dominant_color_topic,
             10
         )
 
